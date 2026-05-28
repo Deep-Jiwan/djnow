@@ -25,10 +25,14 @@ It is fully compatible with the [deej](https://github.com/omriharel/deej) deskto
 ```
 djnow/
 ├── README.md
+├── include/
+│   └── djnow_protocol.h       # Shared packet/config definitions
 ├── transmitter/
-│   └── transmitter.ino        # TX firmware (to be implemented)
+│   └── transmitter.ino        # TX firmware
 ├── receiver/
-│   └── receiver.ino           # RX firmware (to be implemented)
+│   └── receiver.ino           # RX firmware
+├── tests/
+│   └── test_protocol.cpp      # Host-side protocol/pin tests
 └── docs/
     ├── 01_project_overview.md
     ├── 02_hardware.md
@@ -58,6 +62,28 @@ djnow/
 ## Docs
 
 See the [`docs/`](docs/) folder for full technical specifications, wiring diagrams, protocol details, and design decisions.
+
+---
+
+## Pin Mapping (TX Potentiometers)
+
+This implementation uses the requested rank-ordered ADC1 pin set:
+
+- Slider 1 → GPIO3
+- Slider 2 → GPIO4
+- Slider 3 → GPIO1
+- Slider 4 → GPIO0
+- Slider 5 → GPIO2
+
+TX status LED uses GPIO10 to keep all five ADC1 pins free.
+
+---
+
+## Local Test Command
+
+```bash
+g++ -std=c++17 -Iinclude tests/test_protocol.cpp -o /tmp/djnow_test_protocol && /tmp/djnow_test_protocol
+```
 
 ---
 
