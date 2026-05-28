@@ -33,9 +33,6 @@ void setState(RxState next) {
 void fillDataWithZeros() {
   memset(&latestData, 0, sizeof(latestData));
   djnow::fillMagic(latestData.magic);
-  for (uint8_t i = 0; i < djnow::SLIDER_COUNT; ++i) {
-    latestData.sliders[i] = 0;
-  }
 }
 
 void addBroadcastPeerIfNeeded() {

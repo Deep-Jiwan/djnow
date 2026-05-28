@@ -70,6 +70,15 @@ bool setupReceiverPeer() {
   return esp_now_add_peer(&peerInfo) == ESP_OK;
 }
 
+void clearBindingAndRescan() {
+  if (hasReceiverMac) {
+    esp_now_del_peer(receiverMac);
+  }
+  memset(receiverMac, 0, sizeof(receiverMac));
+  hasReceiverMac = false;
+  setState(TxState::SCANNING);
+}
+
 bool sendBindAck() {
   djnow::BindAckPacket ack = {};
   djnow::fillMagic(ack.magic);
@@ -123,8 +132,7 @@ void sendSliderPacket() {
   const esp_err_t status =
       esp_now_send(receiverMac, reinterpret_cast<const uint8_t*>(&pkt), sizeof(pkt));
   if (status != ESP_OK) {
-    // Keep behavior deterministic: restart and re-run bind flow.
-    ESP.restart();
+    clearBindingAndRescan();
   }
 }
 

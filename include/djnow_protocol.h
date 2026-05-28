@@ -11,6 +11,7 @@
 namespace djnow {
 
 constexpr char MAGIC[8] = "DJNOW01";
+static_assert(sizeof(MAGIC) == 8, "MAGIC must be exactly 8 bytes including null terminator");
 constexpr uint8_t ROLE_RX_ADVERT = 0x01;
 constexpr uint8_t ROLE_TX_ACK = 0x02;
 constexpr uint8_t SLIDER_COUNT = 5;
@@ -39,13 +40,14 @@ struct DataPacket {
 } __attribute__((packed));
 
 inline void fillMagic(char out[8]) {
-  memcpy(out, MAGIC, sizeof(MAGIC));
+  memcpy(out, MAGIC, 8);
 }
 
 inline void fillPhrase(char out[32]) {
   memset(out, 0, 32);
   const size_t len = strnlen(BIND_PHRASE, 31);
   memcpy(out, BIND_PHRASE, len);
+  out[len] = '\0';
 }
 
 inline bool magicMatches(const char in[8]) {
